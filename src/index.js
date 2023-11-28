@@ -1,17 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+// import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ChakraProvider } from '@chakra-ui/react'
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-
+import AppContex from './context/appContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  // <GoogleOAuthProvider clientId="184076318503-rpapm9p6bpdbltre1q8rao6e67epv4h8.apps.googleusercontent.com">
+  // <React.StrictMode>
+    <AppContex>
+      <ChakraProvider>
+        <App />
+      </ChakraProvider>
+    </AppContex>
+  // </React.StrictMode>
+  // </GoogleOAuthProvider>,
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

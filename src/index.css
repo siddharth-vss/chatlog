@@ -1,3 +1,5 @@
+
+  @import url('https://fonts.googleapis.com/css2?family=Agbalumo&display=swap');
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,9 +7,38 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font: 14px "Agbalumo" ,Helvetica, Arial, sans-serif;
+}
+.App{
+  background-image:url("./background.png");
+  background-position: center;
+  background-size: cover;
+  min-height: 100vh;
+  min-width: 90vw;
+
+}
+h1 {
+  color: #00B7FF;
+  font-family: 'Agbalumo' , normal ;
+  font-size: 50px;
+}
+p{
+  font-family: 'Agbalumo';
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+
+#chats{
+  width: 100%;
+  
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+#chatbox{
+  margin-top: 5px;
+}
+
+#chatfeed{
+  height: 72vh; 
 }
