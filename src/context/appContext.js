@@ -21,29 +21,17 @@ import axios from 'axios';
 import { useState } from 'react';
 
 
-
-const user = localStorage.getItem('userInfo');
-const _id = localStorage.getItem('id');
-
-const name = localStorage.getItem('name');
-const pic = localStorage.getItem('pic');
-const email = localStorage.getItem('email');
-
-
-
-
-
 export const initialState = {
   showSidebar: false,
   isLoading: false,
   showAlert: false,
   alertText: '',
   alertType: '',
-  user: user,
-  id: _id,
-  name: name,
-  pic: pic,
-  email: email,
+  user: '',
+  id: '',
+  name: '',
+  pic: '',
+  email: '',
 };
 
 
@@ -63,6 +51,10 @@ const AppProvider = ({ children }) => {
     width: undefined,
     height: undefined,
   });
+
+  useEffect(()=>{
+    console.log(localStorage.getItem('userInfo'));
+  })
 
   useEffect(() => {
     function handleResize() {
@@ -125,24 +117,6 @@ const AppProvider = ({ children }) => {
     }, 3000);
   };
 
-  const addUserToLocalStorage = ({ email, name, pic, token, _id }) => {
-    localStorage.setItem('userInfo', token);
-    localStorage.setItem('name', name);
-    localStorage.setItem('id', _id);
-
-    localStorage.setItem('pic', pic);
-    localStorage.setItem('email', email);
-
-  };
-
-  const removeUserFromLocalStorage = () => {
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('name');
-    localStorage.removeItem('pic');
-    localStorage.removeItem('id');
-    localStorage.removeItem('email');
-
-  };
 
   const registerUser = async (currentUser) => {
     dispatch({ type: REGISTER_USER_BEGIN });
@@ -157,10 +131,6 @@ const AppProvider = ({ children }) => {
         },
       });
 
-      addUserToLocalStorage({
-        email, name, pic, token, _id
-
-      })
     } catch (error) {
       dispatch({
         type: REGISTER_USER_ERROR,
@@ -184,10 +154,7 @@ const AppProvider = ({ children }) => {
 
         }
       });
-      addUserToLocalStorage({
-        email, name, pic, token, _id
-
-      })
+     
     } catch (error) {
       dispatch({
         type: LOGIN_USER_ERROR,
@@ -200,7 +167,6 @@ const AppProvider = ({ children }) => {
 
   const logoutUser = () => {
     dispatch({ type: LOGOUT_USER })
-    removeUserFromLocalStorage()
   }
 
 
@@ -211,7 +177,6 @@ const AppProvider = ({ children }) => {
         displayAlert,
         registerUser,
         loginUser,
-        removeUserFromLocalStorage,
         logoutUser,
         selectedChat,
         setSelectedChat,

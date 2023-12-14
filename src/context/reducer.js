@@ -22,14 +22,11 @@ const reducer = (state, action) => {
   if (action.type === REGISTER_USER_SUCCESS) {
     return {
       ...state,
-
       email: action.payload.email,
       name: action.payload.name,
-      _id: action.payload._id,
+      id: action.payload._id,
       pic: action.payload.pic,
-      token: action.payload.token,
-      userLocation: action.payload.location,
-      jobLocation: action.payload.location,
+      user: action.payload.token,
       isLoading: false,
       showAlert: true,
       alertType: 'success',
@@ -54,14 +51,13 @@ const reducer = (state, action) => {
   if (action.type === LOGIN_USER_SUCCESS) {
     return {
       ...state,
+
       isLoading: false,
       email: action.payload.email,
       name: action.payload.name,
-      _id: action.payload._id,
+      id: action.payload._id,
       pic: action.payload.pic,
-      token: action.payload.token,
-      userLocation: action.payload.location,
-      jobLocation: action.payload.location,
+      user: action.payload.token,
       showAlert: true,
       alertType: 'success',
       alertText: 'Login Successful! Redirecting...',
@@ -96,8 +92,11 @@ const reducer = (state, action) => {
   if (action.type === LOGOUT_USER) {
     return {
       ...initialState,
+      email: null,
+      name: null,
+      id: null,
+      pic:  null,
       user: null,
-      token: null,
      };
   }
 

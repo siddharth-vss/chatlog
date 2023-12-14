@@ -47,7 +47,7 @@ function SideDrawer() {
     windowSize,
     pic,
     email,
-    
+    logoutUser,
     chats,
     sp,
     setChats,
@@ -59,7 +59,7 @@ function SideDrawer() {
   const width = windowSize.width;
 
   const logoutHandler = () => {
-    localStorage.removeItem("userInfo");
+    logoutUser();
     navigate("/");
   };
 
