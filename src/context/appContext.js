@@ -25,6 +25,7 @@ export const initialState = {
   showSidebar: false,
   isLoading: false,
   showAlert: false,
+  
   alertText: '',
   alertType: '',
   user: '',
@@ -40,8 +41,10 @@ export const initialState = {
 
 const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
+  const bg = localStorage.getItem("BGI") ? localStorage.getItem("BGI") : null;
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  const [BGI, setBGI] = useState(bg);
+  // console.log(BGI)
   const [selectedChat, setSelectedChat] = useState();
 
   // const [notification, setNotification] = useState([]);
@@ -51,9 +54,16 @@ const AppProvider = ({ children }) => {
     width: undefined,
     height: undefined,
   });
+ 
+  const style = {
+    backgroundImage: `url(${BGI})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }
 
   useEffect(()=>{
-    console.log(localStorage.getItem('userInfo'));
+    // console.log(localStorage.getItem('userInfo'));
   })
 
   useEffect(() => {
@@ -74,6 +84,7 @@ const AppProvider = ({ children }) => {
 
   const sp = axios.create({
     baseURL: 'https://talk-a-live-sp.onrender.com',
+    // baseURL: 'http://localhost:5000',
     headers: {
       Authorization: `Bearer ${state.user}`,
     },
@@ -141,10 +152,13 @@ const AppProvider = ({ children }) => {
   };
 
   const loginUser = async (currentUser) => {
+    console.log("start1");
 
     dispatch({ type: LOGIN_USER_BEGIN });
+    console.log("start2");
     try {
       const response = await sp.post('/users/login', currentUser);
+      console.log("start3");
 
       const { email, name, pic, token, _id } = response.data;
       dispatch({
@@ -154,13 +168,15 @@ const AppProvider = ({ children }) => {
 
         }
       });
-     
+        
+      console.log("start4");
     } catch (error) {
       dispatch({
         type: LOGIN_USER_ERROR,
         payload: { msg: error.response.data.error },
       });
     }
+    console.log("loged in");
     clearAlert();
   };
 
@@ -185,6 +201,8 @@ const AppProvider = ({ children }) => {
         chats,
         setChats,
         sp,
+        style,
+        BGI,setBGI,
         windowSize,
 
 

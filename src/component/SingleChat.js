@@ -2,19 +2,20 @@ import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 import "./styles.css";
-import { IconButton, Spinner, useToast } from "@chakra-ui/react";
+import { IconButton, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import { useEffect, useState } from "react";
 
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModal from "./miscellaneous/ProfileModal";
-import ScrollableChat from "./ScrollableChat";
+// import ScrollableChat from "./ScrollableChat";
 
 // import animationData from "../animations/typing.json";
 
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
-import { useAppContext } from "../context/appContext"
+import { useAppContext } from "../context/appContext";
+import SingleChatHelper from "./SingleChatHelper";
 const ENDPOINT = "https://talk-a-live-sp.onrender.com"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
 var socket, selectedChatCompare;
 
@@ -27,6 +28,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const toast = useToast();
 
+  // const bgi = "https://i.pinimg.com/564x/9a/48/b8/9a48b83f7f608bb17600ad797ea9d159.jpg"
+
   // const defaultOptions = {
   //   loop: true,
   //   autoplay: true,
@@ -35,19 +38,25 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   //     preserveAspectRatio: "xMidYMid slice",
   //   },
   // };
-  const { selectedChat,  sp, setSelectedChat, id, notification, setNotification } =
-    useAppContext();
+  const {
+    selectedChat,
+    sp,
+    setSelectedChat,
+    id,
+    BGI,
+    setBGI,
+    style,
+    notification,
+    setNotification,
+  } = useAppContext();
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
 
     try {
-
       setLoading(true);
 
-      const { data } = await sp.get(
-        `/messages/${selectedChat._id}`,
-      );
+      const { data } = await sp.get(`/messages/${selectedChat._id}`);
       setMessages(data);
       setLoading(false);
 
@@ -64,20 +73,64 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   };
 
+  const postDetails = (pics) => {
+    setLoading(true);
+    if (pics === undefined) {
+      toast({
+        title: `Please select Image`,
+        status: "warning",
+        position: "top",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (
+      pics.type === "image/jpg" ||
+      pics.type === "image/jpeg" ||
+      pics.type === "image/png"
+    ) {
+      let Data = new FormData();
+      Data.append("file", pics);
+      Data.append("upload_preset", "chat-app");
+      Data.append("cloud_name", "dabh5hsuk");
+      fetch("https://api.cloudinary.com/v1_1/dabh5hsuk/image/upload", {
+        method: "POST",
+        body: Data,
+      })
+        .then((res) => res.json())
+        .then((Data) => {
+          localStorage.setItem("BGI", Data.url.toString());
+          setBGI(Data.url.toString());
+
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+        });
+    } else {
+      toast({
+        title: `Please select Image`,
+        status: "warning",
+        position: "top",
+        duration: 5000,
+        isClosable: true,
+      });
+      setLoading(false);
+      return;
+    }
+  };
+
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
       socket.emit("stop typing", selectedChat._id);
       try {
-
         setNewMessage("");
-        const { data } = await sp.post(
-          "/messages",
-          {
-            content: newMessage,
-            chatId: selectedChat,
-          },
-
-        );
+        const { data } = await sp.post("/messages", {
+          content: newMessage,
+          chatId: selectedChat,
+        });
         socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (error) {
@@ -99,7 +152,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
-
 
     // eslint-disable-next-line
   }, []);
@@ -152,7 +204,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     <>
       {selectedChat ? (
         <>
-
           <Text
             fontSize={{ base: "28px", md: "30px" }}
             pb={3}
@@ -171,13 +222,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             {messages &&
               (!selectedChat.isGroupChat ? (
                 <>
-
                   {getSender(id, selectedChat.users)}
 
-                  <ProfileModal
-                    user={getSenderFull(id, selectedChat.users)}
-                  />
-
+                  <ProfileModal user={getSenderFull(id, selectedChat.users)} />
+                  {(BGI === null || BGI === undefined || BGI === "") ? (
+                    <Input
+                      type={"file"}
+                      p={1.5}
+                      accept="image/*"
+                      placeContent={"Enter Your Name"}
+                      onChange={(e) => {
+                        postDetails(e.target.files[0]);
+                      }}
+                    />
+                  ) : (
+                    <></>
+                  )}
                 </>
               ) : (
                 <>
@@ -190,72 +250,37 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 </>
               ))}
           </Text>
-          <Box
-            d="flex"
-            flexDir="column"
-            justifyContent="flex-end"
-            p={3}
-            bg="#E8E8E8"
-            w="100%"
-            h="100%"
-            borderRadius="lg"
-            overflowY="hidden"
+
+          <SingleChatHelper
+            messages={messages}
+            istyping={istyping}
+            loading={loading}
+          />
+          <FormControl
+            onKeyDown={sendMessage}
+            id="first-name"
+            isRequired
+            mt={3}
           >
-            {loading ? (
-              <Spinner
-                size="xl"
-                w={20}
-                h={20}
-                alignSelf="center"
-                margin="auto"
-              />
-            ) : (
-              <div className="messages">
-                <ScrollableChat messages={messages} />
-              </div>
-            )}
-
-            <FormControl
-              onKeyDown={sendMessage}
-              id="first-name"
-              isRequired
-              mt={3}
-            >
-              {istyping ? (
-                <div>
-                  <Box
-                    width={70}
-
-                    style={{ marginBottom: 15, background:"#F0F0F0",borderRadius:"10px", marginLeft: 0 }}
-                  >typing ...</Box>
-                  
-                
-                </div>
-              ) : (
-                <></>
-              )}
-              <Input
-
-                variant="filled"
-                bg="#E0E0E0"
-                placeholder="Enter a message.."
-                value={newMessage}
-                onChange={typingHandler}
-              />
-            </FormControl>
-          </Box>
+            <Input
+              variant="filled"
+              bg="#E0E0E0"
+              placeholder="Enter a message.."
+              value={newMessage}
+              onChange={typingHandler}
+            />
+          </FormControl>
         </>
       ) : (
         // to get socket.io on same page
         <Box d="flex" alignItems="center" justifyContent="center" h="100%">
-          
-            <Text fontSize="3xl" pb={3} fontFamily="Work sans">
-              Click on a user to start chatting
-            </Text>
+          <Text fontSize="3xl" pb={3} fontFamily="Work sans">
+            Click on a user to start chatting
+          </Text>
         </Box>
       )}
     </>
   );
 };
 
-export default SingleChat;    
+export default SingleChat;
