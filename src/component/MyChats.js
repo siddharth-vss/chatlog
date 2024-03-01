@@ -117,9 +117,9 @@ const MyChats = ({ fetchAgain }) => {
                          {chat.latestMessage && (
                   <Text fontSize="xs">
                     <b>{chat.latestMessage.sender.name} : </b>
-                                        {chat.latestMessage.content.length > 50
-                      ? chat.latestMessage.content.substring(0, 51) + "..."
-                      : chat.latestMessage.content}
+                                      <sp dangerouslySetInnerHTML={{__html: chat.latestMessage.content.length > 30
+                      ? chat.latestMessage.content.substring(0, 31) + "..."
+                      : chat.latestMessage.content}}></sp> 
                 
                   </Text>
                 )}

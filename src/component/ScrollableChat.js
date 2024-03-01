@@ -41,8 +41,9 @@ const ScrollableChat = ({ messages }) => {
                 padding: "5px 15px",
                 maxWidth: "75%",
               }}
+              dangerouslySetInnerHTML={{__html: m.content}}
             >
-              {m.content}
+              {/* {m.content} */}
             </span>
           </div>
         ))}
