@@ -42,3 +42,22 @@ p{
 #chatfeed{
   height: 72vh; 
 }
+input[type="file"] {
+  position: absolute;
+  z-index: -1;
+  top: 10px;
+  left: 8px;
+  font-size: 17px;
+  color: #b8b8b8;
+}
+
+.chats{
+  background-image: linear-gradient(45deg, #f8f8f8,#f8f8f8 ),
+  url('./assets/not.svg');
+  background-blend-mode: multiply;
+}
+.text{
+  /* -webkit-user-select: none; Safari 
+  -ms-user-select: none; IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}

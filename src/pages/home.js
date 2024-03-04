@@ -24,15 +24,15 @@ const Home = () => {
       borderRadius="lg"
       borderWidth="1px"
      >
-       <Text align={"center"} fontSize={'4xl'} color={"#00B7FF"}>
+       <Text className='text' align={"center"} fontSize={'4xl'} color={"#00B7FF"}>
         {/*TEXT-DECREPTO-ALISH*/}TALK-A-LIVE
        </Text>
      </Box>
      <Box bg={"white"} w={"100%"} p={4} borderRadius={"lg"} borderWidth={"1px"} >
      <Tabs variant='soft-rounded' colorScheme='green'>
   <TabList>
-    <Tab width={"50%"}>Login</Tab>
-    <Tab width={"50%"}>Register</Tab>
+    <Tab className='text' width={"50%"}>Login</Tab>
+    <Tab className='text' width={"50%"}>Register</Tab>
   </TabList>
   <TabPanels>
     <TabPanel>

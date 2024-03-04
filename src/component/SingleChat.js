@@ -1,8 +1,9 @@
 import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
+import img from '../assets/orange.svg'
 import "./styles.css";
-import { IconButton, useToast } from "@chakra-ui/react";
+import { IconButton, useToast ,FormLabel  } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import { useEffect, useState } from "react";
 
@@ -16,6 +17,7 @@ import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { useAppContext } from "../context/appContext";
 import SingleChatHelper from "./SingleChatHelper";
+import InputCompo from "./inputCompo";
 const ENDPOINT = "https://chatserver-962m.onrender.com"; // "https://talk-a-tive.herokuapp.com"; -> After deployment
 var socket, selectedChatCompare;
 
@@ -42,10 +44,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     selectedChat,
     sp,
     setSelectedChat,
+    width,
     id,
     BGI,
     setBGI,
-    style,
+    // style,
     notification,
     setNotification,
   } = useAppContext();
@@ -226,15 +229,28 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
                   <ProfileModal user={getSenderFull(id, selectedChat.users)} />
                   {(BGI === null || BGI === undefined || BGI === "") ? (
-                    <Input
-                      type={"file"}
-                      p={1.5}
-                      accept="image/*"
-                      placeContent={"Enter Your Name"}
-                      onChange={(e) => {
-                        postDetails(e.target.files[0]);
-                      }}
-                    />
+                     <FormControl>
+                     <FormLabel
+                     
+                     style={{
+                       backgroundColor:"#2B6CB0",
+                       color:"white",
+                       alignItems:"center",
+                       display:"grid",
+                       textAlign:"center",
+                       height:"40px",
+                       borderRadius:"10px",
+             
+                     }}
+                     >Uplod Background Image</FormLabel>
+                     <Input
+                       type={"file"}
+                       p={1.5}
+                       accept="image/*"
+                       placeContent={"Enter Your Name"}
+                       onChange={(e) => { postDetails(e.target.files[0]) }}
+                     />
+                   </FormControl>
                   ) : (
                     <></>
                   )}
@@ -262,22 +278,56 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             isRequired
             mt={3}
           >
+            <Box 
+            d="flex"
+
+            style={{
+              justifyContent:"space-between",
+              flexDirection: "row",
+            }}
+
+            >
             <Input
+            style={{
+              width: (window.innerWidth<445 ?"85%":"90%"),
+            }}
               variant="filled"
               bg="#E0E0E0"
               placeholder="Enter a message.."
               value={newMessage}
               onChange={typingHandler}
-            />
+            /> 
+            {/* <Input
+            style={{
+              width:"10%",
+            }}
+              variant="filled"
+              // bg="#E0E0E0"
+              placeholder={}
+              value={newMessage}
+              onChange={typingHandler}
+              />  */}
+              {/* <i className="fa fa-unlink" ></i> */}
+              <InputCompo setLoading={setLoading} fetchMessages={fetchMessages} />
+              </Box>
           </FormControl>
         </>
       ) : (
-        // to get socket.io on same page
-        <Box d="flex" alignItems="center" justifyContent="center" h="100%">
-          <Text fontSize="3xl" pb={3} fontFamily="Work sans">
+        // to get socket.io on same page  font- #4169E1, svg-  #FF6B35, bg-  #EEF4ED
+        <Box style={{
+          backgroundRepeat:"no-repeat",
+          backgroundImage : `url(${img})`,
+          width:"89%",
+          position:"relative",
+          top:"75px"
+          
+        }} d="flex" alignItems="center" justifyContent="center"  h="89%">
+          <Text className="text" fontSize="3xl" pb={3} fontFamily="Work sans">
             Click on a user to start chatting
           </Text>
+          
         </Box>
+        
       )}
     </>
   );

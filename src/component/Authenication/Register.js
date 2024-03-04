@@ -156,14 +156,14 @@ const Register = () => {
     <VStack spacing={"5px"}>
 
       <FormControl>
-        <FormLabel>Name</FormLabel>
+        <FormLabel  className="text">Name</FormLabel>
         <Input
           placeContent={"Enter Your Name"}
           onChange={(e) => { setName(e.target.value) }}
         />
       </FormControl>
       <FormControl>
-        <FormLabel>Mobile</FormLabel>
+        <FormLabel  className="text">Mobile</FormLabel>
         <Input
           type="number"
           placeContent={"Enter Your Number"}
@@ -171,7 +171,7 @@ const Register = () => {
         />
       </FormControl>
       <FormControl>
-        <FormLabel>Email</FormLabel>
+        <FormLabel  className="text">Email</FormLabel>
         <Input
           type={"email"}
           placeContent={"Enter Your Name"}
@@ -179,7 +179,7 @@ const Register = () => {
         />
       </FormControl>
       <FormControl>
-        <FormLabel>Password</FormLabel>
+        <FormLabel  className="text">Password</FormLabel>
         <InputGroup>
           <Input
             type={show ? "text" : "password"}
@@ -192,7 +192,7 @@ const Register = () => {
         </InputGroup>
       </FormControl>
       <FormControl>
-        <FormLabel>Confirm Password</FormLabel>
+        <FormLabel  className="text">Confirm Password</FormLabel>
         <InputGroup>
           <Input
             type={show ? "text" : "password"}
@@ -205,7 +205,19 @@ const Register = () => {
         </InputGroup>
       </FormControl>
       <FormControl>
-        <FormLabel>Uplod Profile Picture</FormLabel>
+        <FormLabel  className="text"
+        
+        style={{
+          backgroundColor:"#2B6CB0",
+          color:"white",
+          alignItems:"center",
+          display:"grid",
+          textAlign:"center",
+          height:"40px",
+          borderRadius:"10px",
+
+        }}
+        >Uplod Profile Picture</FormLabel>
         <Input
           type={"file"}
           p={1.5}

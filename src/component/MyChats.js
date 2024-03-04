@@ -62,6 +62,7 @@ const MyChats = ({ fetchAgain }) => {
       borderWidth="1px"
     >
       <Box
+      className="text"
         pb={3}
         px={3}
         fontSize={{ base: "28px", md: "30px" }}
@@ -83,12 +84,12 @@ const MyChats = ({ fetchAgain }) => {
           </Button>
          </GroupChatModal>
       </Box>
-      <Box
+      <Box className="chats"
       id="chats"
         d="flex"
         flexDir="column"
         p={3}
-        bg="#F8F8F8"
+        // bg="#F8F8F8"
         w="100%"
         h="80vh"
         borderRadius="lg"
@@ -99,27 +100,27 @@ const MyChats = ({ fetchAgain }) => {
             {chats.map((chat) => (
               <Box
               
-                id="chatbox"
-                onClick={() => setSelectedChat(chat)}
-                cursor="pointer"
-                bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
-                color={selectedChat === chat ? "white" : "black"}
-                px={3}
-                py={2}
-                borderRadius="lg"
-                key={chat._id}
+              id="chatbox"
+              onClick={() => setSelectedChat(chat)}
+              cursor="pointer"
+              bg={selectedChat?._id === chat?._id ? "#38B2AC" : "#E8E8E8"}
+              color={selectedChat?._id === chat?._id ? "white" : "black"}
+              px={3}
+              py={2}
+              borderRadius="lg"
+              key={chat._id}
               >
-                <Text>
+                <Text className="text" >
                   {!chat.isGroupChat
                     ? getSender(id, chat.users)
                     : chat.chatName}
                 </Text>
                          {chat.latestMessage && (
                   <Text fontSize="xs">
-                    <b>{chat.latestMessage.sender.name} : </b>
-                                      <sp dangerouslySetInnerHTML={{__html: chat.latestMessage.content.length > 30
+                    <b className="text" >{chat.latestMessage.sender.name} : </b>
+                                      <b dangerouslySetInnerHTML={{__html: chat.latestMessage.content.length > 30
                       ? chat.latestMessage.content.substring(0, 31) + "..."
-                      : chat.latestMessage.content}}></sp> 
+                      : chat.latestMessage.content}}></b> 
                 
                   </Text>
                 )}
