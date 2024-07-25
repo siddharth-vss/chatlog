@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import { useAppContext } from "../../context/appContext";
@@ -21,13 +21,6 @@ const Login = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  useEffect(() => {
-    return () => {
-      if (localStorage.getItem("user-id")) {
-        navigate("/chats");
-      }
-    };
-  });
   const postDetails = async () => {
     try {
       loginUser({ email: "testuser@test.com", password: "testuser" });
